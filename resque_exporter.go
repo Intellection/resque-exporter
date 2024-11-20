@@ -350,8 +350,8 @@ func main() {
 	reg.MustRegister(exporter)
 
 	http.Handle(*metricPath, promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg}))
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`<html>
+	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
+		_, err := w.Write([]byte(`<html>
 <head><title>Resque Exporter</title></head>
 <body>
 <h1>Resque Exporter</h1>
@@ -359,6 +359,10 @@ func main() {
 </body>
 </html>
 `))
+
+		if err != nil {
+			log.Error(err)
+		}
 	})
 
 	log.Infoln("Listening on", *listenAddress)
