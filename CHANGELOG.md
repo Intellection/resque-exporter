@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0
+
+* Migrate from Dep to Go modules.
+* Remove vendored packages.
+* Upgrade `github.com/prometheus/client_golang` to `v1.20.4`.
+* Upgrade `github.com/prometheus/common` to `v0.60.1`.
+* Switch from `github.com/prometheus/common/log` to `github.com/sirupsen/logrus`.
+* Improve setting and fetching of version information.
+* Minor updates to account for package upgrades.
+
 ## 0.3.0
 
 #### Changed
