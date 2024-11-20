@@ -13,7 +13,8 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/version"
+	"github.com/prometheus/client_golang/prometheus/collectors/version"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -312,20 +313,14 @@ func (e *Exporter) redisKey(a ...string) string {
 	return e.redisNamespace + ":" + strings.Join(a, ":")
 }
 
-func init() {
-	prometheus.MustRegister(version.NewCollector("resque_exporter"))
-}
-
 func main() {
 	flag.Parse()
 
 	if *printVersion {
-		fmt.Println(version.Print("resque-exporter"))
 		return
 	}
 
-	log.Infoln("Starting resque-exporter", version.Info())
-	log.Infoln("Build context", version.BuildContext())
+	log.Infoln("Starting resque-exporter")
 
 	if u := os.Getenv("REDIS_URL"); len(u) > 0 {
 		*redisURL = u
@@ -335,9 +330,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	prometheus.MustRegister(exporter)
+	reg := prometheus.NewRegistry()
+	reg.MustRegister(version.NewCollector("resque_exporter"))
+	reg.MustRegister(exporter)
 
-	http.Handle(*metricPath, prometheus.Handler())
+	http.Handle(*metricPath, promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg}))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
 <head><title>Resque Exporter</title></head>
