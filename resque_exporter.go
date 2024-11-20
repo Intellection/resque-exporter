@@ -316,11 +316,26 @@ func (e *Exporter) redisKey(a ...string) string {
 func main() {
 	flag.Parse()
 
+	versionInfo := GetInfo()
+
 	if *printVersion {
+		if versionInfo.SourceModified {
+			versionInfo.SourceRevision = fmt.Sprintf("%s (modified)", versionInfo.SourceRevision)
+		}
+
+		if versionInfo.Development {
+			versionInfo.Tag = fmt.Sprintf("%s (development)", versionInfo.Tag)
+		}
+
+		fmt.Printf("Name:      %s\n", "resque-exporter")
+		fmt.Printf("Version:   %s\n", versionInfo.Tag)
+		fmt.Printf("Revision:  %s\n", versionInfo.SourceRevision)
+		fmt.Printf("Time:      %s\n", versionInfo.SourceTime)
+
 		return
 	}
 
-	log.Infoln("Starting resque-exporter")
+	log.Infoln("Starting resque-exporter", versionInfo.Tag)
 
 	if u := os.Getenv("REDIS_URL"); len(u) > 0 {
 		*redisURL = u
