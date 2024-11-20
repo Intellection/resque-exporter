@@ -1,5 +1,7 @@
 # Resque Exporter
 
+[![tests](https://github.com/Intellection/resque-exporter/actions/workflows/test.yml/badge.svg)](https://github.com/Intellection/resque-exporter/actions/workflows/test.yml)  [![release](https://github.com/Intellection/resque-exporter/actions/workflows/release.yml/badge.svg)](https://github.com/Intellection/resque-exporter/actions/workflows/release.yml)
+
 Prometheus exporter for Resque metrics.
 
 ## Usage
