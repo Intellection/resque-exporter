@@ -55,13 +55,3 @@ You can deploy the resque exporter using the [zappi/resque-exporter](https://hub
 | resque\_workers | Number of workers. | |
 | resque\_workers\_per\_queue | Number of workers handling a specific queue. | queue |
 | resque\_working\_workers | Number of working workers. | |
-
-## Development
-
-### Building
-
-    make
-
-### Building Docker image
-
-    make docker
